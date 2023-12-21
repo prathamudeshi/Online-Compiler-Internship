@@ -41,6 +41,13 @@ def submitcode(request):
 def submitgg(request):
     if request.method == "POST":
         codeareadata = request.POST['codearea']
+        input_part = request.POST['inputarea']
+        y = input_part
+        input_part = input_part.replace("\n"," ").split(" ")
+        def input():
+            a = input_part[0]
+            del input_part[0]
+            return a
 
         try:
             original_stdout = sys.stdout
@@ -56,11 +63,11 @@ def submitgg(request):
 
         
         code  = Code.objects.create(
-            input = codeareadata,
+            code = codeareadata,
             output = output
         )
         code.save()
 
-        return render(request , 'index.html', {"code":codeareadata , "output":output})
+        return render(request , 'index.html', {"code":codeareadata ,"input":y, "output":output})
     
 
