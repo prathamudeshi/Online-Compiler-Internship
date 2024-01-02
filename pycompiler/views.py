@@ -1,6 +1,5 @@
 import sys
-
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from pycompiler.models import *
 
 def index(request):
@@ -71,3 +70,67 @@ def submitgg(request):
         return render(request , 'index.html', {"code":codeareadata ,"input":y, "output":output})
     
 
+def login_page(request):
+    return render(request, 'login.html')
+
+def registerstu(request):
+    if request.method == "POST":
+        first_name = request.POST.get('stu_first_name')
+        last_name = request.POST.get('stu_last_name')
+        username = request.POST.get('stu_username')
+        rollno = request.POST.get('rollno')
+        password = request.POST.get('password')
+
+        user = User.objects.create(
+            first_name=  first_name,
+            last_name = last_name,
+            username = username,
+            is_staff = False
+        )
+
+        user.set_password(password)
+        user.save()
+
+        student = Student.objects.create(
+            user = user,
+            rollno = rollno
+        )
+
+        student.save()
+
+        return redirect('/register-student/')
+
+
+
+    return render(request, 'registerstu.html')
+
+def registerfac(request):
+    if request.method == "POST":
+        first_name = request.POST.get('fac_first_name')
+        last_name = request.POST.get('fac_last_name')
+        username = request.POST.get('fac_username')
+        # rollno = request.POST.get('rollno')
+        password = request.POST.get('password')
+
+        user = User.objects.create(
+            first_name=  first_name,
+            last_name = last_name,
+            username = username,
+            is_staff = True
+        )
+
+        user.set_password(password)
+        user.save()
+
+        faculty = Faculty.objects.create(
+            user = user,
+            # rollno = rollno
+        )
+
+        faculty.save()
+
+        return redirect('/register-faculty/')
+
+
+
+    return render(request, 'registerfac.html')
